@@ -1,0 +1,30 @@
+name: automerge
+on:
+  pull_request:
+    types:
+      - labeled
+      - unlabeled
+      - synchronize
+      - opened
+      - edited
+      - ready_for_review
+      - reopened
+      - unlocked
+  status: {}
+jobs:
+  automerge:
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+      GITHUB_TOKEN: "${{ secrets.DEPLOY_TOKEN }}"
+      MERGE_FORKS: "false"
+      MERGE_LABELS: "enhancement"
+      MERGE_DELETE_BRANCH: "true"
+    steps:
+      - id: automerge
+        if: ${{ env.DEPLOY_TOKEN != '' }}
+        name: automerge
+        uses: "pascalgn/automerge-action@v0.15.6"
+        env:
+          GITHUB_TOKEN: "${{ secrets.DEPLOY_TOKEN }}"
+
