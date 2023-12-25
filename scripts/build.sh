@@ -105,6 +105,8 @@ for org_dir in ./render/*; do
                 find "$project_dir_path" -type f | while read -r dir; do
                     dir_no_project_path=${dir#$project_dir_path/}
                 
+                    sectionName="$first_dir"
+                    subSectionName="$first_dir"
                     if [ "$dir_no_project_path" != "$dir" ]; then
                         # echo "$dir_no_project_path" 
                         numDirs=$(echo $(($(echo "$dir_no_project_path" | grep -o "/" | wc -l)+1)))
@@ -119,11 +121,15 @@ for org_dir in ./render/*; do
                                 echo "<div class=\"quarto-layout-row quarto-layout-valign-top\"><div class=\"quarto-layout-cell quarto-layout-cell-subref\" style=\"flex-basis: 100%; justify-content: center\" ><div id=\"fig-${filename_no_extension}\" class=\"quarto-figure quarto-figure-center anchored\" ><figure class=\"figure\"><p><img src=\"/$REPO/render/${org_name_full}/${project_name}/$dir_no_project_path\" class=\"img-fluid figure-img\" data-ref-parent=\"fig-$first_dir\" /></p><p></p><figcaption class=\"figure-caption\"> ${filename_no_extension} </figcaption><p></p></figure></div></div></div>" >> "$temp_file" 
                                 echo "<figcaption class=\"figure-caption\"> Figure&nbsp;: $first_dir </figcaption> <p></p> </figure> </div>"  >> "$temp_file"                                   
                                 echo " </section>"  >> "$temp_file"      
-                                echo "<li> <a href=\"#fig-${filename_no_extension}\" id=\"toc-${filename_no_extension}\" class=\"nav-link active\" data-scroll-target=\"#fig-${filename_no_extension}\" >${filename_no_extension}</a></li>" >> "$temp_file_for_links"                                
+                                echo "<li> <a href=\"#fig-${filename_no_extension}\" id=\"toc-${filename_no_extension}\" class=\"nav-link active\" data-scroll-target=\"#sec-${first_dir}\" >${first_dir}</a></li>" >> "$temp_file_for_links"                                
                                 ;;
                             3)
                                 ## Has section 
                                 ## Has sub section
+                                sectionName="$first_dir"
+                                # loop through all in section
+
+                                
                                 ;;
                                 
                             *)
