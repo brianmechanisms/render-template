@@ -156,14 +156,14 @@ for org_dir in ./render/*; do
                                 ## Has sub section
                                 echo "$subSectionName <==> $second_dir"
                                 if [ "$subSectionName" != "$second_dir" ]; then ## New subsection
-                                    sectionIndex=$((sectionIndex + 1))
+                                    
                                     subSectionName="$second_dir"
                                     # close previous section if existed...
                                     if [ $sectionIndex -gt 0 ]; then 
                                         echo " </section>"  >> "$temp_file"
                                     fi
                                     echo "<section id=\"sec-$second_dir\" class=\"level3\"><h3 class=\"anchored\" data-anchor-id=\"sec-$second_dir\"> $second_dir <a class=\"anchorjs-link\" aria-label=\"Anchor\" data-anchorjs-icon=\"\" href=\"#sec-$second_dir\" style=\"font: 1em / 1 anchorjs-icons; padding-left: 0.375em\" ></a> </h3>" >> "$temp_file" 
-                                    # Create new subsection
+                                    sectionIndex=$((sectionIndex + 1))
                                 else 
                                     filename=$(basename "$dir_no_project_path")
                                     filename_no_extension="${filename%.*}"
