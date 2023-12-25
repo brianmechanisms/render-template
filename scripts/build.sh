@@ -108,7 +108,7 @@ for org_dir in ./render/*; do
                     dir_no_project_path=${dir#$project_dir_path/}
                 
                     sectionName="$first_dir"
-                    subSectionName="$first_dir"
+                    subSectionName=""
                     if [ "$dir_no_project_path" != "$dir" ]; then
                         
                         # echo "$dir_no_project_path" 
