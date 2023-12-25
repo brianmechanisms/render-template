@@ -104,11 +104,13 @@ for org_dir in ./render/*; do
 
                 index=0
                 sectionIndex=0
+                sectionName=""
+                subSectionName=""
                 find "$project_dir_path" -type f | while read -r dir; do
                     dir_no_project_path=${dir#$project_dir_path/}
                 
-                    sectionName="$first_dir"
-                    subSectionName=""
+                    # sectionName="$first_dir"
+                    # subSectionName=""
                     if [ "$dir_no_project_path" != "$dir" ]; then
                         
                         # echo "$dir_no_project_path" 
