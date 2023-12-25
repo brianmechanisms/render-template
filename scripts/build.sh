@@ -88,14 +88,52 @@ for org_dir in ./render/*; do
                 # Loop through files in the directory
                 echo "" > "$temp_file"
                 echo "" > "$temp_file_for_links"
-                for file in "$project_dir_path/"*; do
-                    # if [ -f "$file" ]; then
-                        filename=$(basename "$file")
-                        filename_no_extension="${filename%.*}"
-                        echo "<div class=\"quarto-layout-row quarto-layout-valign-top\"><div class=\"quarto-layout-cell quarto-layout-cell-subref\" style=\"flex-basis: 100%; justify-content: center\" ><div id=\"fig-${filename_no_extension}\" class=\"quarto-figure quarto-figure-center anchored\" ><figure class=\"figure\"><p><img src=\"/$REPO/render/${org_name_full}/${project_name}/${filename}/${filename}.png\" class=\"img-fluid figure-img\" data-ref-parent=\"fig-figure3.1\" /></p><p></p><figcaption class=\"figure-caption\"> ${filename_no_extension} </figcaption><p></p></figure></div></div></div>" >> "$temp_file"   
-                        echo "<li> <a href=\"#fig-${filename_no_extension}\" id=\"toc-${filename_no_extension}\" class=\"nav-link active\" data-scroll-target=\"#fig-${filename_no_extension}\" >${filename_no_extension}</a></li>" >> "$temp_file_for_links"   
-                    # fi
+                # for file in "$project_dir_path/"*; do
+                #     # echo $file $project_dir_path
+                #     # ls -lha -r "$file"
+                #     # if [ -f "$file" ]; then
+                #         filename=$(basename "$file")
+                #         filename_no_extension="${filename%.*}"
+                #         echo "<div class=\"quarto-layout-row quarto-layout-valign-top\"><div class=\"quarto-layout-cell quarto-layout-cell-subref\" style=\"flex-basis: 100%; justify-content: center\" ><div id=\"fig-${filename_no_extension}\" class=\"quarto-figure quarto-figure-center anchored\" ><figure class=\"figure\"><p><img src=\"/$REPO/render/${org_name_full}/${project_name}/${filename}/${filename}.png\" class=\"img-fluid figure-img\" data-ref-parent=\"fig-figure3.1\" /></p><p></p><figcaption class=\"figure-caption\"> ${filename_no_extension} </figcaption><p></p></figure></div></div></div>" >> "$temp_file"   
+                #         echo "<li> <a href=\"#fig-${filename_no_extension}\" id=\"toc-${filename_no_extension}\" class=\"nav-link active\" data-scroll-target=\"#fig-${filename_no_extension}\" >${filename_no_extension}</a></li>" >> "$temp_file_for_links"   
+                #     # fi
+                # done
+                # find "$project_dir_path" -type d 
+                # basename "$project_dir_path"
+
+
+                find "$project_dir_path" -type f | while read -r dir; do
+                    dir_no_project_path=${dir#$project_dir_path/}
+                
+                    if [ "$dir_no_project_path" != "$dir" ]; then
+                        # echo "$dir_no_project_path" 
+                        numDirs=$(echo $(($(echo "$dir_no_project_path" | grep -o "/" | wc -l)+1)))
+                        # echo $numDirs
+                        first_dir=$(echo "$dir_no_project_path" | cut -d'/' -f1)
+                        # echo "$first_dir"
+                        case $numDirs in
+                            2)
+                                ## Has section 
+                                echo "<section id=\"$sec-$first_dir\" class=\"level2\"><h2 class=\"anchored\" data-anchor-id=\"sec-$first_dir\"> $first_dir <a class=\"anchorjs-link\" aria-label=\"Anchor\" data-anchorjs-icon=\"\" href=\"#sec-$first_dir\" style=\"font: 1em / 1 anchorjs-icons; padding-left: 0.375em\" ></a> </h2>" >> "$temp_file"   
+                                echo "<div id=\"fig-$first_dir\" class=\"quarto-layout-panel\" data-nrow=\"1\"> <figure class=\"figure\">"  >> "$temp_file" 
+                                echo "<div class=\"quarto-layout-row quarto-layout-valign-top\"><div class=\"quarto-layout-cell quarto-layout-cell-subref\" style=\"flex-basis: 100%; justify-content: center\" ><div id=\"fig-${filename_no_extension}\" class=\"quarto-figure quarto-figure-center anchored\" ><figure class=\"figure\"><p><img src=\"/$REPO/render/${org_name_full}/${project_name}/$dir_no_project_path\" class=\"img-fluid figure-img\" data-ref-parent=\"fig-$first_dir\" /></p><p></p><figcaption class=\"figure-caption\"> ${filename_no_extension} </figcaption><p></p></figure></div></div></div>" >> "$temp_file" 
+                                echo "<figcaption class=\"figure-caption\"> Figure&nbsp;: $first_dir </figcaption> <p></p> </figure> </div>"  >> "$temp_file"                                   
+                                echo " </section>"  >> "$temp_file"      
+                                echo "<li> <a href=\"#fig-${filename_no_extension}\" id=\"toc-${filename_no_extension}\" class=\"nav-link active\" data-scroll-target=\"#fig-${filename_no_extension}\" >${filename_no_extension}</a></li>" >> "$temp_file_for_links"                                
+                                ;;
+                            3)
+                                ## Has section 
+                                ## Has sub section
+                                ;;
+                                
+                            *)
+                                ;;
+                        esac
+
+                    fi
                 done
+
+
                 sed -i "s/{{section}}/$(sed 's:/:\\/:g' $temp_file | tr -d '\n')/g" "$template_file"
                 sed -i "s/{{links}}/$(sed 's:/:\\/:g' $temp_file_for_links | tr -d '\n')/g" "$template_file"
             fi
