@@ -118,6 +118,7 @@ for org_dir in ./render/*; do
                         first_dir=$(echo "$dir_no_project_path" | cut -d'/' -f1)
                         second_dir=$(echo "$dir_no_project_path" | awk -F'/' '{print $2}')
                         isNewSection=0 # false
+                        echo "$sectionName <=:::=> $first_dir"
                         if [ "$first_dir" != "$sectionName" ]; then 
                             isNewSection=1 # true
                             sectionName="$first_dir"
@@ -148,6 +149,7 @@ for org_dir in ./render/*; do
                             3)
                                 ## Has section 
                                 ## Has sub section
+                                echo "$subSectionName <==> $second_dir"
                                 if [ "$subSectionName" != "$second_dir" ]; then 
                                     subSectionName="$second_dir"
                                     echo "<section id=\"sec-$second_dir\" class=\"level3\"><h3 class=\"anchored\" data-anchor-id=\"sec-$second_dir\"> $second_dir <a class=\"anchorjs-link\" aria-label=\"Anchor\" data-anchorjs-icon=\"\" href=\"#sec-$second_dir\" style=\"font: 1em / 1 anchorjs-icons; padding-left: 0.375em\" ></a> </h3>" >> "$temp_file" 
