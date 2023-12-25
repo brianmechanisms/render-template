@@ -120,7 +120,6 @@ for org_dir in ./render/*; do
                         first_dir=$(echo "$dir_no_project_path" | cut -d'/' -f1)
                         second_dir=$(echo "$dir_no_project_path" | awk -F'/' '{print $2}')
                         isNewSection=0 # false
-                        echo "$sectionName <=:::=> $first_dir"
                         if [ "$first_dir" != "$sectionName" ]; then 
                             isNewSection=1 # true
                             sectionName="$first_dir"
@@ -164,13 +163,13 @@ for org_dir in ./render/*; do
                                     fi
                                     echo "<section id=\"sec-$second_dir\" class=\"level3\"><h3 class=\"anchored\" data-anchor-id=\"sec-$second_dir\"> $second_dir <a class=\"anchorjs-link\" aria-label=\"Anchor\" data-anchorjs-icon=\"\" href=\"#sec-$second_dir\" style=\"font: 1em / 1 anchorjs-icons; padding-left: 0.375em\" ></a> </h3>" >> "$temp_file" 
                                     sectionIndex=$((sectionIndex + 1))
-                                else 
+                                fi 
                                     filename=$(basename "$dir_no_project_path")
                                     filename_no_extension="${filename%.*}"
                                     echo "<div id=\"fig-$filename_no_extension\" class=\"quarto-layout-panel\" data-nrow=\"1\"> <figure class=\"figure\">"  >> "$temp_file" 
                                     echo "<div class=\"quarto-layout-row quarto-layout-valign-top\"><div class=\"quarto-layout-cell quarto-layout-cell-subref\" style=\"flex-basis: 100%; justify-content: center\" ><div id=\"fig-${filename_no_extension}\" class=\"quarto-figure quarto-figure-center anchored\" ><figure class=\"figure\"><p><img src=\"/$REPO/render/${org_name_full}/${project_name}/$dir_no_project_path\" class=\"img-fluid figure-img\" data-ref-parent=\"fig-$filename_no_extension\" /></p><p></p><figcaption class=\"figure-caption\"> ${filename_no_extension} </figcaption><p></p></figure></div></div></div>" >> "$temp_file" 
                                     echo "<figcaption class=\"figure-caption\"> $filename_no_extension </figcaption> <p></p> </figure> </div>"  >> "$temp_file"
-                                fi
+                                # fi
                                 ;;
                                 
                             *)
