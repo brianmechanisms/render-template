@@ -125,16 +125,19 @@ for org_dir in ./render/*; do
                             isNewSection=1 # true
                             sectionName="$first_dir"
                             echo "<li> <a href=\"#sec-${first_dir}\" id=\"toc-${filename_no_extension}\" class=\"nav-link active\" data-scroll-target=\"#sec-${first_dir}\" >${first_dir}</a></li>" >> "$temp_file_for_links"  
+                            
+                            if [ "$subSectionName" != "" ]; then # New section starting and previous was subsection
+                                # close subsection
+                                echo " </section>"  >> "$temp_file"
+                            fi
                             if [ $index  -gt 0 ]; then 
+                            
                                 echo " </section>"  >> "$temp_file" 
                             fi
                             echo "<section id=\"sec-$first_dir\" class=\"level2\"><h2 class=\"anchored\" data-anchor-id=\"sec-$first_dir\"> $first_dir <a class=\"anchorjs-link\" aria-label=\"Anchor\" data-anchorjs-icon=\"\" href=\"#sec-$first_dir\" style=\"font: 1em / 1 anchorjs-icons; padding-left: 0.375em\" ></a> </h2>" >> "$temp_file" 
                             sectionIndex=$((sectionIndex + 1))
 
-                            if [ "$subSectionName" != "" ]; then # New section starting and previous was subsection
-                                # close subsection
-                                echo " </section>"  >> "$temp_file"
-                            fi
+                            
                             subSectionName=""
                         fi
                         # echo "$first_dir"
