@@ -146,7 +146,7 @@ for org_dir in ./render/*; do
                                 # echo "<section id=\"$sec-$first_dir\" class=\"level2\"><h2 class=\"anchored\" data-anchor-id=\"sec-$first_dir\"> $first_dir <a class=\"anchorjs-link\" aria-label=\"Anchor\" data-anchorjs-icon=\"\" href=\"#sec-$first_dir\" style=\"font: 1em / 1 anchorjs-icons; padding-left: 0.375em\" ></a> </h2>" >> "$temp_file"   
                                 echo "<div id=\"fig-$first_dir\" class=\"quarto-layout-panel\" data-nrow=\"1\"> <figure class=\"figure\">"  >> "$temp_file" 
                                 echo "<div class=\"quarto-layout-row quarto-layout-valign-top\"><div class=\"quarto-layout-cell quarto-layout-cell-subref\" style=\"flex-basis: 100%; justify-content: center\" ><div id=\"fig-${first_dir}\" class=\"quarto-figure quarto-figure-center anchored\" ><figure class=\"figure\"><p><img src=\"/$REPO/render/${org_name_full}/${project_name}/$dir_no_project_path\" class=\"img-fluid figure-img\" data-ref-parent=\"fig-$first_dir\" /></p><p></p><figcaption class=\"figure-caption\"> ${first_dir} </figcaption><p></p></figure></div></div></div>" >> "$temp_file" 
-                                echo "<figcaption class=\"figure-caption\"> $first_dir </figcaption> <p></p> </figure> </div>"  >> "$temp_file"                                   
+                                # echo "<figcaption class=\"figure-caption\"> $first_dir </figcaption> <p></p> </figure> </div>"  >> "$temp_file"                                   
                                 # echo " </section>"  >> "$temp_file"      
                                                               
                                 ;;
@@ -168,7 +168,7 @@ for org_dir in ./render/*; do
                                     filename_no_extension="${filename%.*}"
                                     echo "<div id=\"fig-$filename_no_extension\" class=\"quarto-layout-panel\" data-nrow=\"1\"> <figure class=\"figure\">"  >> "$temp_file" 
                                     echo "<div class=\"quarto-layout-row quarto-layout-valign-top\"><div class=\"quarto-layout-cell quarto-layout-cell-subref\" style=\"flex-basis: 100%; justify-content: center\" ><div id=\"fig-${filename_no_extension}\" class=\"quarto-figure quarto-figure-center anchored\" ><figure class=\"figure\"><p><img src=\"/$REPO/render/${org_name_full}/${project_name}/$dir_no_project_path\" class=\"img-fluid figure-img\" data-ref-parent=\"fig-$filename_no_extension\" /></p><p></p><figcaption class=\"figure-caption\"> ${filename_no_extension} </figcaption><p></p></figure></div></div></div>" >> "$temp_file" 
-                                    echo "<figcaption class=\"figure-caption\"> $filename_no_extension </figcaption> <p></p> </figure> </div>"  >> "$temp_file"
+                                    # echo "<figcaption class=\"figure-caption\"> $filename_no_extension </figcaption> <p></p> </figure> </div>"  >> "$temp_file"
                                 # fi
                                 ;;
                                 
