@@ -127,6 +127,12 @@ for org_dir in ./render/*; do
                             fi
                             echo "<section id=\"sec-$first_dir\" class=\"level2\"><h2 class=\"anchored\" data-anchor-id=\"sec-$first_dir\"> $first_dir <a class=\"anchorjs-link\" aria-label=\"Anchor\" data-anchorjs-icon=\"\" href=\"#sec-$first_dir\" style=\"font: 1em / 1 anchorjs-icons; padding-left: 0.375em\" ></a> </h2>" >> "$temp_file" 
                             sectionIndex=$((sectionIndex + 1))
+
+                            if [ "$subSectionName" != "" ]; then 
+                                # close subsection
+                                echo " </section>"  >> "$temp_file"
+                            fi
+                            subSectionName=""
                         fi
                         # echo "$first_dir"
                         case $numDirs in
@@ -134,7 +140,7 @@ for org_dir in ./render/*; do
                                 ## Has section 
                                 # echo "<section id=\"$sec-$first_dir\" class=\"level2\"><h2 class=\"anchored\" data-anchor-id=\"sec-$first_dir\"> $first_dir <a class=\"anchorjs-link\" aria-label=\"Anchor\" data-anchorjs-icon=\"\" href=\"#sec-$first_dir\" style=\"font: 1em / 1 anchorjs-icons; padding-left: 0.375em\" ></a> </h2>" >> "$temp_file"   
                                 echo "<div id=\"fig-$first_dir\" class=\"quarto-layout-panel\" data-nrow=\"1\"> <figure class=\"figure\">"  >> "$temp_file" 
-                                echo "<div class=\"quarto-layout-row quarto-layout-valign-top\"><div class=\"quarto-layout-cell quarto-layout-cell-subref\" style=\"flex-basis: 100%; justify-content: center\" ><div id=\"fig-${filename_no_extension}\" class=\"quarto-figure quarto-figure-center anchored\" ><figure class=\"figure\"><p><img src=\"/$REPO/render/${org_name_full}/${project_name}/$dir_no_project_path\" class=\"img-fluid figure-img\" data-ref-parent=\"fig-$first_dir\" /></p><p></p><figcaption class=\"figure-caption\"> ${filename_no_extension} </figcaption><p></p></figure></div></div></div>" >> "$temp_file" 
+                                echo "<div class=\"quarto-layout-row quarto-layout-valign-top\"><div class=\"quarto-layout-cell quarto-layout-cell-subref\" style=\"flex-basis: 100%; justify-content: center\" ><div id=\"fig-${first_dir}\" class=\"quarto-figure quarto-figure-center anchored\" ><figure class=\"figure\"><p><img src=\"/$REPO/render/${org_name_full}/${project_name}/$dir_no_project_path\" class=\"img-fluid figure-img\" data-ref-parent=\"fig-$first_dir\" /></p><p></p><figcaption class=\"figure-caption\"> ${first_dir} </figcaption><p></p></figure></div></div></div>" >> "$temp_file" 
                                 echo "<figcaption class=\"figure-caption\"> $first_dir </figcaption> <p></p> </figure> </div>"  >> "$temp_file"                                   
                                 # echo " </section>"  >> "$temp_file"      
                                                               
@@ -143,12 +149,16 @@ for org_dir in ./render/*; do
                                 ## Has section 
                                 ## Has sub section
                                 if [ "$subSectionName" != "$second_dir" ]; then 
-                                    
+                                    subSectionName="$second_dir"
+                                    echo "<section id=\"sec-$second_dir\" class=\"level3\"><h3 class=\"anchored\" data-anchor-id=\"sec-$second_dir\"> $second_dir <a class=\"anchorjs-link\" aria-label=\"Anchor\" data-anchorjs-icon=\"\" href=\"#sec-$second_dir\" style=\"font: 1em / 1 anchorjs-icons; padding-left: 0.375em\" ></a> </h3>" >> "$temp_file" 
+                                    # Create new subsection
+                                else 
+                                    filename=$(basename "$dir_no_project_path")
+                                    filename_no_extension="${filename%.*}"
+                                    echo "<div id=\"fig-$filename_no_extension\" class=\"quarto-layout-panel\" data-nrow=\"1\"> <figure class=\"figure\">"  >> "$temp_file" 
+                                    echo "<div class=\"quarto-layout-row quarto-layout-valign-top\"><div class=\"quarto-layout-cell quarto-layout-cell-subref\" style=\"flex-basis: 100%; justify-content: center\" ><div id=\"fig-${filename_no_extension}\" class=\"quarto-figure quarto-figure-center anchored\" ><figure class=\"figure\"><p><img src=\"/$REPO/render/${org_name_full}/${project_name}/$dir_no_project_path\" class=\"img-fluid figure-img\" data-ref-parent=\"fig-$filename_no_extension\" /></p><p></p><figcaption class=\"figure-caption\"> ${filename_no_extension} </figcaption><p></p></figure></div></div></div>" >> "$temp_file" 
+                                    echo "<figcaption class=\"figure-caption\"> $filename_no_extension </figcaption> <p></p> </figure> </div>"  >> "$temp_file"
                                 fi
-                                sectionName="$first_dir"
-                                # loop through all in section
-
-                                
                                 ;;
                                 
                             *)
