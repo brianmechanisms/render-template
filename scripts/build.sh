@@ -40,6 +40,7 @@ sidebarItems=$(cat "$sidebar_temp_file")
 sed -i "s|{{sidebar}}|$sidebarItems|g" "./public/index.html"
 sed -i "s/{{organization}}/$ORGANIZATION/g" "./public/index.html"
 sed -i "s/{{repo}}/$REPO/g" "./public/index.html"
+env_file="./env_file"
 
 for org_dir in ./render/*; do
     if [ -d "$org_dir" ]; then
@@ -81,6 +82,8 @@ for org_dir in ./render/*; do
                 sed -i "s/{{organization}}/$org_name/" "$template_file"
                 sed -i "s/{{repo}}/$REPO/g" "$template_file"
                 sed -i "s/{{source}}/$project_name/g" "$template_file"
+                sourcerepo=$(grep "^$project_name=" "$env_file" | awk -F '=' '{print $2}')
+                sed -i "s/{{sourcerepo}}/$sourcerepo/g" "$template_file"
                 # sed -i "s|{{sidebar}}|$sidebarItems_2|g" "$template_file"
                 sidebar_content=$(< "$sidebar_temp_file_2")
                 awk -v var="$sidebar_content" '{gsub("{{sidebar}}", var)} 1' "$template_file" > temp_file && mv temp_file "$template_file"
