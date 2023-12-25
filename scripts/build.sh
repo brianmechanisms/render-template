@@ -102,26 +102,39 @@ for org_dir in ./render/*; do
                 # basename "$project_dir_path"
 
 
+                index=0
                 find "$project_dir_path" -type f | while read -r dir; do
                     dir_no_project_path=${dir#$project_dir_path/}
                 
                     sectionName="$first_dir"
                     subSectionName="$first_dir"
                     if [ "$dir_no_project_path" != "$dir" ]; then
+                        
                         # echo "$dir_no_project_path" 
                         numDirs=$(echo $(($(echo "$dir_no_project_path" | grep -o "/" | wc -l)+1)))
                         # echo $numDirs
                         first_dir=$(echo "$dir_no_project_path" | cut -d'/' -f1)
+                        second_dir=$(echo "$dir_no_project_path" | awk -F'/' '{print $2}')
+                        isNewSection=0 # false
+                        if [ "$first_dir" != "$sectionName" ]; then 
+                            isNewSection=1 # true
+                            sectionName="$first_dir"
+                            echo "<li> <a href=\"#sec-${first_dir}\" id=\"toc-${filename_no_extension}\" class=\"nav-link active\" data-scroll-target=\"#sec-${first_dir}\" >${first_dir}</a></li>" >> "$temp_file_for_links"  
+                            if [ index -gt 0 ]; then 
+                                echo " </section>"  >> "$temp_file" 
+                            fi
+                            echo "<section id=\"$sec-$first_dir\" class=\"level2\"><h2 class=\"anchored\" data-anchor-id=\"sec-$first_dir\"> $first_dir <a class=\"anchorjs-link\" aria-label=\"Anchor\" data-anchorjs-icon=\"\" href=\"#sec-$first_dir\" style=\"font: 1em / 1 anchorjs-icons; padding-left: 0.375em\" ></a> </h2>" >> "$temp_file" 
+                        fi
                         # echo "$first_dir"
                         case $numDirs in
                             2)
                                 ## Has section 
-                                echo "<section id=\"$sec-$first_dir\" class=\"level2\"><h2 class=\"anchored\" data-anchor-id=\"sec-$first_dir\"> $first_dir <a class=\"anchorjs-link\" aria-label=\"Anchor\" data-anchorjs-icon=\"\" href=\"#sec-$first_dir\" style=\"font: 1em / 1 anchorjs-icons; padding-left: 0.375em\" ></a> </h2>" >> "$temp_file"   
+                                # echo "<section id=\"$sec-$first_dir\" class=\"level2\"><h2 class=\"anchored\" data-anchor-id=\"sec-$first_dir\"> $first_dir <a class=\"anchorjs-link\" aria-label=\"Anchor\" data-anchorjs-icon=\"\" href=\"#sec-$first_dir\" style=\"font: 1em / 1 anchorjs-icons; padding-left: 0.375em\" ></a> </h2>" >> "$temp_file"   
                                 echo "<div id=\"fig-$first_dir\" class=\"quarto-layout-panel\" data-nrow=\"1\"> <figure class=\"figure\">"  >> "$temp_file" 
                                 echo "<div class=\"quarto-layout-row quarto-layout-valign-top\"><div class=\"quarto-layout-cell quarto-layout-cell-subref\" style=\"flex-basis: 100%; justify-content: center\" ><div id=\"fig-${filename_no_extension}\" class=\"quarto-figure quarto-figure-center anchored\" ><figure class=\"figure\"><p><img src=\"/$REPO/render/${org_name_full}/${project_name}/$dir_no_project_path\" class=\"img-fluid figure-img\" data-ref-parent=\"fig-$first_dir\" /></p><p></p><figcaption class=\"figure-caption\"> ${filename_no_extension} </figcaption><p></p></figure></div></div></div>" >> "$temp_file" 
-                                echo "<figcaption class=\"figure-caption\"> Figure&nbsp;: $first_dir </figcaption> <p></p> </figure> </div>"  >> "$temp_file"                                   
-                                echo " </section>"  >> "$temp_file"      
-                                echo "<li> <a href=\"#fig-${filename_no_extension}\" id=\"toc-${filename_no_extension}\" class=\"nav-link active\" data-scroll-target=\"#sec-${first_dir}\" >${first_dir}</a></li>" >> "$temp_file_for_links"                                
+                                echo "<figcaption class=\"figure-caption\"> $first_dir </figcaption> <p></p> </figure> </div>"  >> "$temp_file"                                   
+                                # echo " </section>"  >> "$temp_file"      
+                                                              
                                 ;;
                             3)
                                 ## Has section 
@@ -135,7 +148,7 @@ for org_dir in ./render/*; do
                             *)
                                 ;;
                         esac
-
+                        index=$((index + 1))
                     fi
                 done
 
