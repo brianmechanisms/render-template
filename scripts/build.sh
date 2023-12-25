@@ -103,6 +103,7 @@ for org_dir in ./render/*; do
 
 
                 index=0
+                sectionIndex=0
                 find "$project_dir_path" -type f | while read -r dir; do
                     dir_no_project_path=${dir#$project_dir_path/}
                 
@@ -113,6 +114,7 @@ for org_dir in ./render/*; do
                         # echo "$dir_no_project_path" 
                         numDirs=$(echo $(($(echo "$dir_no_project_path" | grep -o "/" | wc -l)+1)))
                         # echo $numDirs
+                        # use both cut and awk to split strings
                         first_dir=$(echo "$dir_no_project_path" | cut -d'/' -f1)
                         second_dir=$(echo "$dir_no_project_path" | awk -F'/' '{print $2}')
                         isNewSection=0 # false
@@ -123,7 +125,8 @@ for org_dir in ./render/*; do
                             if [ index -gt 0 ]; then 
                                 echo " </section>"  >> "$temp_file" 
                             fi
-                            echo "<section id=\"$sec-$first_dir\" class=\"level2\"><h2 class=\"anchored\" data-anchor-id=\"sec-$first_dir\"> $first_dir <a class=\"anchorjs-link\" aria-label=\"Anchor\" data-anchorjs-icon=\"\" href=\"#sec-$first_dir\" style=\"font: 1em / 1 anchorjs-icons; padding-left: 0.375em\" ></a> </h2>" >> "$temp_file" 
+                            echo "<section id=\"sec-$first_dir\" class=\"level2\"><h2 class=\"anchored\" data-anchor-id=\"sec-$first_dir\"> $first_dir <a class=\"anchorjs-link\" aria-label=\"Anchor\" data-anchorjs-icon=\"\" href=\"#sec-$first_dir\" style=\"font: 1em / 1 anchorjs-icons; padding-left: 0.375em\" ></a> </h2>" >> "$temp_file" 
+                            sectionIndex=$((sectionIndex + 1))
                         fi
                         # echo "$first_dir"
                         case $numDirs in
@@ -139,6 +142,9 @@ for org_dir in ./render/*; do
                             3)
                                 ## Has section 
                                 ## Has sub section
+                                if [ "$subSectionName" != "$second_dir" ]; then 
+                                    
+                                fi
                                 sectionName="$first_dir"
                                 # loop through all in section
 
